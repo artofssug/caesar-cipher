@@ -1,21 +1,18 @@
+# Implement a caesar cipher that takes in a string and the shift factor and then outputs the modified string:
 def caesar_cipher(string, shift_factor)
-    alphabet = Array('a'..'z')
-    punctuation_signs = Array('!'..'?')
-    new_index = []
-    new_string = []
-    string.chars.each do |ch|
-        if (punctuation_signs.any?(ch) || ch == " ")
-            new_string << ch
+    punctuation_signs = ('!'..'?')
+    caesar_ord = string.split('').map { |chr| (chr == " " or punctuation_signs.any?(chr)) ? chr.ord : chr.ord + shift_factor }
+    caesar_string = caesar_ord.map do |chr|
+        if chr > 122
+            chr = (96 + (chr % 122)).chr
+        elsif chr.between?(91, 96)
+            chr = (64 + (chr % 90)).chr
         else
-            new_index << alphabet.find_index { |letter| letter == ch.downcase }.to_i + shift_factor
-            if ch == ch.upcase
-                new_string << alphabet[(new_index.last) % 26].upcase
-            else 
-                new_string << alphabet[(new_index.last) % 26]
-            end
+            chr.chr
         end
     end
-    p new_string.join
+    p caesar_string.join
 end
+
 
 caesar_cipher("What a string!", 5)
